@@ -1,8 +1,26 @@
 import logging
 import config
 import re
-
+from telegram import ReplyKeyboardMarkup
+from keyboard import get_base_reply_keyboard
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.utils.request import Request
+from telegram import Bot
+
+
+def debug_requests(f):
+    '''Декоратор для отладки событий
+    '''
+    def inner(*args,**kwargs):
+        try:
+            logger.info(f"Обращение в функцию {f.__name__}")
+            return f(*args, **kwargs)
+        except Exception:
+            logger.exception(f"Ошибка в обработчике {f.__name__}")
+            raise
+
+    return inner
+
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -10,17 +28,41 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+# @debug_requests
+# def start(update :Updater, context: CallbackContext):
+#     """Send a message when the command /start is issued."""
+#     update.message.reply_text(
+#         text = "Привет!"
+#     #reply_markup = get_base_reply_keyboard(),
+#     )
 
-def start(update, context):
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+########################################################################################################################
+BUTTON1_LESSONS = "Расписание"
+BUTTON2_ADDRESS = "Адрес"
+reply_keyboard = [
+    [
+        BUTTON1_LESSONS,BUTTON2_ADDRESS
+    ]
+]
+markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
+########################################################################################################################
+
+@debug_requests
+def do_start(update, context):
+    update.message.reply_text(
+        "Hi! My name is Doctor Botter. I will hold a more complex conversation with you. "
+        "Why don't you tell me something about yourself?",
+        reply_markup=markup
+        )
 
 
+
+@debug_requests
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
 
-
+@debug_requests
 def echo(update, context):
     text2 = update.message.text
     tpl = '\d\d\d[-]\d\d\d'
@@ -30,32 +72,47 @@ def echo(update, context):
         update.message.reply_text('# Не соответствует')
 
 
-
+@debug_requests
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-def check():
-    print("Hello")
-
-
 def main():
     logger.info("Start bot")
-    # updater = Updater("1136587446:AAFJyUfBYMaWSa8-0dSxtvne-k-fC5s3ZM8", use_context=True)
-    updater = Updater(config.token, use_context=True)
+
+    req = Request(
+        connect_timeout=0.5,
+        read_timeout=1.0
+    )
+
+    bot = Bot(
+        token = config.token,
+        request=req
+    )
+    updater = Updater(
+        bot = bot,
+        use_context=True
+    )
+
+    info = bot.get_me()
+    logger.info(f'Bot info: {info}')
+
+    #TODO подлючить бд и сделать декораторы
+
+    #Default connection
+    #updater = Updater(config.token, use_context=True)
+
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("start", do_start))
     dp.add_handler(CommandHandler("help", help))
-
-    # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
+    # dp.add_error_handler(error)
 
-    # log all errors
-    dp.add_error_handler(error)
+
 
     # Start the Bot
     updater.start_polling()
