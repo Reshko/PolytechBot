@@ -11,7 +11,8 @@ from telegram import Bot
 def debug_requests(f):
     '''Декоратор для отладки событий
     '''
-    def inner(*args,**kwargs):
+
+    def inner(*args, **kwargs):
         try:
             logger.info(f"Обращение в функцию {f.__name__}")
             return f(*args, **kwargs)
@@ -28,23 +29,19 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-# @debug_requests
-# def start(update :Updater, context: CallbackContext):
-#     """Send a message when the command /start is issued."""
-#     update.message.reply_text(
-#         text = "Привет!"
-#     #reply_markup = get_base_reply_keyboard(),
-#     )
-
 ########################################################################################################################
 BUTTON1_LESSONS = "Расписание"
 BUTTON2_ADDRESS = "Адрес"
+BUTTON3_INFO = "Информация"
+
 reply_keyboard = [
     [
-        BUTTON1_LESSONS,BUTTON2_ADDRESS
+        BUTTON1_LESSONS, BUTTON2_ADDRESS
     ]
 ]
-markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
+markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
+
+
 ########################################################################################################################
 
 @debug_requests
@@ -53,8 +50,7 @@ def do_start(update, context):
         "Hi! My name is Doctor Botter. I will hold a more complex conversation with you. "
         "Why don't you tell me something about yourself?",
         reply_markup=markup
-        )
-
+    )
 
 
 @debug_requests
@@ -62,20 +58,27 @@ def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
 
+
 @debug_requests
-def echo(update, context):
-    text2 = update.message.text
-    tpl = '\d\d\d[-]\d\d\d'
-    if re.match(tpl, text2) is not None:
-        update.message.reply_text("Соответсвует")
-    else:
-        update.message.reply_text('# Не соответствует')
+def echo(update: Updater, context):
+    if update.message.text == BUTTON1_LESSONS:
+        print(update.message)
+        # update.message.reply_text("Введите учебную группу")
+        # text2 = update.message.text
+        # tpl = '\d\d\d[-]\d\d\d'
+        # if re.match(tpl, text2) is not None:
+        #     update.message.reply_text("Соответсвует")
+        # else:
+        #     update.message.reply_text('# Не соответствует')
+    elif update.message.text == BUTTON2_ADDRESS:
+        update.message.reply_text("Вот и адрес")
 
 
 @debug_requests
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
+
 
 def main():
     logger.info("Start bot")
@@ -86,22 +89,21 @@ def main():
     )
 
     bot = Bot(
-        token = config.token,
+        token=config.token,
         request=req
     )
     updater = Updater(
-        bot = bot,
+        bot=bot,
         use_context=True
     )
 
     info = bot.get_me()
     logger.info(f'Bot info: {info}')
 
-    #TODO подлючить бд и сделать декораторы
+    # TODO подлючить бд и сделать декораторы
 
-    #Default connection
-    #updater = Updater(config.token, use_context=True)
-
+    # Default connection
+    # updater = Updater(config.token, use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -111,8 +113,6 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(MessageHandler(Filters.text, echo))
     # dp.add_error_handler(error)
-
-
 
     # Start the Bot
     updater.start_polling()
