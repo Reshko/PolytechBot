@@ -1,3 +1,4 @@
+import json
 import logging
 import config
 import re
@@ -6,6 +7,9 @@ from keyboard import get_base_reply_keyboard
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.utils.request import Request
 from telegram import Bot
+import db
+import requests
+import datetime
 
 
 def debug_requests(f):
@@ -47,8 +51,7 @@ markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyb
 @debug_requests
 def do_start(update, context):
     update.message.reply_text(
-        "Hi! My name is Doctor Botter. I will hold a more complex conversation with you. "
-        "Why don't you tell me something about yourself?",
+        "АКОПЯН ПРИВЕТ",
         reply_markup=markup
     )
 
@@ -59,19 +62,38 @@ def help(update, context):
     update.message.reply_text('Help!')
 
 
+
+
+
 @debug_requests
 def echo(update: Updater, context):
-    if update.message.text == BUTTON1_LESSONS:
-        print(update.message)
-        # update.message.reply_text("Введите учебную группу")
-        # text2 = update.message.text
-        # tpl = '\d\d\d[-]\d\d\d'
-        # if re.match(tpl, text2) is not None:
-        #     update.message.reply_text("Соответсвует")
-        # else:
-        #     update.message.reply_text('# Не соответствует')
-    elif update.message.text == BUTTON2_ADDRESS:
-        update.message.reply_text("Вот и адрес")
+    strr = 1;
+    if update.message.text == BUTTON1_LESSONS and strr == 1:
+        strr = strr+1
+        update.message.reply_text("Введите учебную группу")
+    else:
+        text2 = update.message.text
+        tpl = '\d\d\d[-]\d\d\d'
+        if re.match(tpl, text2) is not None:
+            update.message.reply_text("Соответсвует")
+            if (db.serach_group(text2) > 0):
+                update.message.reply_text("Группа есть")
+                url = "https://rasp.dmami.ru/site/group?session=0&group=" + text2
+                headers = {'referer': 'https://rasp.dmami.ru/'}
+                r = requests.get(url, headers=headers)
+                datee = datetime.datetime.today()
+                datee = datee.weekday()
+                rr = r.text
+                data = json.loads(rr)
+                print(datee)
+                update.message.reply_text(data['grid'][str(datee)]['2'])
+
+
+            else:
+                update.message.reply_text("Группы нет")
+        else:
+            update.message.reply_text('# Не соответствует')
+
 
 
 @debug_requests

@@ -52,4 +52,3 @@ def serach_group(number_group: str):
     (res,) = c.fetchone()
     conn.commit()
     return res
-
