@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3cc3b460-741c-4ab1-b7c3-572bf682a188" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,7 +197,7 @@
       <workItem from="1586181703707" duration="4556000" />
       <workItem from="1586197106419" duration="3624000" />
       <workItem from="1586458256502" duration="4244000" />
-      <workItem from="1586521997591" duration="6752000" />
+      <workItem from="1586521997591" duration="7017000" />
     </task>
     <task id="LOCAL-00001" summary="Доделать диалог">
       <created>1586200871779</created>
@@ -208,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586200871779</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="- запрос к сайту &#10;- вывод пар">
+      <created>1586529659427</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1586529659427</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,7 +234,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Доделать диалог" />
-    <option name="LAST_COMMIT_MESSAGE" value="Доделать диалог" />
+    <MESSAGE value="- запрос к сайту &#10;- вывод пар" />
+    <option name="LAST_COMMIT_MESSAGE" value="- запрос к сайту &#10;- вывод пар" />
   </component>
   <component name="WindowStateProjectService">
     <state x="820" y="186" width="816" height="691" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586029104576">
@@ -240,10 +246,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="720" y="323" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1585852484717" />
-    <state x="598" y="118" key="CommitChangelistDialog2" timestamp="1586200869774">
+    <state x="598" y="118" key="CommitChangelistDialog2" timestamp="1586529657855">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="598" y="118" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1586200869774" />
+    <state x="598" y="118" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1586529657855" />
     <state x="104" y="169" width="1736" height="856" key="DiffContextDialog" timestamp="1586017329999">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
