@@ -3,7 +3,7 @@ import json
 
 __connection = None
 
-
+#Создание базы данных
 def get_connection():
     global __connection
     if __connection is None:
@@ -25,12 +25,15 @@ def init_db(force: bool = False):
         )
     ''')
 
+    #Забираем данные по группа из файла
+    #TODO СДЕЛАТЬ ДИНАМИЧКОЕ ОБНОВЛЕНИЕ ЭТОГО ФАЙЛА
     with open('groups-list.json') as f:
         templates = json.load(f)
     f.close()
 
     _group = templates['groups']
 
+    #Вливание данных из файла в бд
     for i in _group:
         c.execute('INSERT INTO all_group (numberGroup) VALUES (?)', (i,))
 
@@ -38,13 +41,7 @@ def init_db(force: bool = False):
     conn.commit()
 
 
-def add_message(user_id: int, text: str):
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('INSERT INTO all_group (user_id, text) VALUES (?, ?)', (user_id, text))
-    conn.commit()
-
-
+#Поиск совпадений по группам
 def serach_group(number_group: str):
     conn = get_connection()
     c = conn.cursor()

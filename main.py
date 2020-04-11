@@ -2,20 +2,17 @@ import json
 import logging
 import config
 import re
-from telegram import ReplyKeyboardMarkup
-from keyboard import get_base_reply_keyboard
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.utils.request import Request
 from telegram import Bot
 import db
 import requests
 import datetime
+import keyboard
 
-
+'''Декоратор для отладки событий
+  '''
 def debug_requests(f):
-    '''Декоратор для отладки событий
-    '''
-
     def inner(*args, **kwargs):
         try:
             logger.info(f"Обращение в функцию {f.__name__}")
@@ -23,7 +20,6 @@ def debug_requests(f):
         except Exception:
             logger.exception(f"Ошибка в обработчике {f.__name__}")
             raise
-
     return inner
 
 
@@ -33,42 +29,28 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-########################################################################################################################
-BUTTON1_LESSONS = "Расписание"
-BUTTON2_ADDRESS = "Адрес"
-BUTTON3_INFO = "Информация"
-
-reply_keyboard = [
-    [
-        BUTTON1_LESSONS, BUTTON2_ADDRESS
-    ]
-]
-markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
 
 
-########################################################################################################################
 
 @debug_requests
 def do_start(update, context):
     update.message.reply_text(
         "АКОПЯН ПРИВЕТ",
-        reply_markup=markup
+        reply_markup=keyboard.markup
     )
 
 
 @debug_requests
 def help(update, context):
-    """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
 
 
 
-
-
+#TODO Перелопатить этот костыль
 @debug_requests
 def echo(update: Updater, context):
     strr = 1;
-    if update.message.text == BUTTON1_LESSONS and strr == 1:
+    if update.message.text == keyboard.BUTTON1_LESSONS and strr == 1:
         strr = strr+1
         update.message.reply_text("Введите учебную группу")
     else:
@@ -85,10 +67,23 @@ def echo(update: Updater, context):
                 datee = datee.weekday()
                 rr = r.text
                 data = json.loads(rr)
-                print(datee)
-                update.message.reply_text(data['grid'][str(datee)]['2'])
 
+                a = 0
+                spicok_par = []
 
+                while a != 7:
+                    a += 1
+                    try:
+                        type_lesson = str(data['grid']['6'][str(a)][0]['type'])
+                        spicok_par.append(type_lesson)
+                        teacher = str(data['grid']['6'][str(a)][0]['teacher'])
+                        spicok_par.append(teacher)
+                        name_lesson = str(data['grid']['6'][str(a)][0]['sbj'])
+                        spicok_par.append(spicok_par.append(name_lesson))
+                    except IndexError:
+                        continue
+
+                update.message.reply_text(str(spicok_par))
             else:
                 update.message.reply_text("Группы нет")
         else:
@@ -122,7 +117,7 @@ def main():
     info = bot.get_me()
     logger.info(f'Bot info: {info}')
 
-    # TODO подлючить бд и сделать декораторы
+    # TODO подлючить бд
 
     # Default connection
     # updater = Updater(config.token, use_context=True)

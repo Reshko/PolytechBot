@@ -1,27 +1,12 @@
-from telegram import KeyboardButton
 from telegram import ReplyKeyboardMarkup
 
+#Инициация клавиатуры
 BUTTON1_LESSONS = "Расписание"
 BUTTON2_ADDRESS = "Адрес"
 
-
-
 reply_keyboard = [
     [
-        BUTTON1_LESSONS,BUTTON2_ADDRESS
+        BUTTON1_LESSONS, BUTTON2_ADDRESS
     ]
 ]
-
-markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-
-def get_base_reply_keyboard():
-    keyboard = [
-        [
-            KeyboardButton(BUTTON1_LESSONS),
-            KeyboardButton(BUTTON2_ADDRESS)
-        ]
-    ]
-    return ReplyKeyboardMarkup(
-        keyboard=keyboard,
-        resize_keyboard=True,
-    )
+markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True) #one_time_keyboard - клава закрывается после нажатия,resize_keyboard - маленькие кнопки
