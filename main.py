@@ -2,7 +2,7 @@ import json
 import logging
 import config
 import re
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from telegram.utils.request import Request
 from telegram import Bot
 import db
@@ -29,66 +29,72 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-
-
+ECHO, LESSONS, ADDRESS = range(3)
 
 @debug_requests
 def do_start(update, context):
     update.message.reply_text(
-        "АКОПЯН ПРИВЕТ",
+        "Всем привет",
         reply_markup=keyboard.markup
     )
-
+    return ECHO
 
 @debug_requests
-def help(update, context):
-    update.message.reply_text('Help!')
-
-
-
-#TODO Перелопатить этот костыль
-@debug_requests
-def echo(update: Updater, context):
-    strr = 1;
-    if update.message.text == keyboard.BUTTON1_LESSONS and strr == 1:
-        strr = strr+1
-        update.message.reply_text("Введите учебную группу")
+def echo(update:Updater, contex):
+    if update.message.text == keyboard.BUTTON1_LESSONS:
+        update.message.reply_text("Введи группу")
+        return LESSONS
+    elif update.message.text == keyboard.BUTTON2_ADDRESS:
+        update.message.reply_text("Выбири адрес")
+        return ADDRESS
     else:
-        text2 = update.message.text
-        tpl = '\d\d\d[-]\d\d\d'
-        if re.match(tpl, text2) is not None:
-            update.message.reply_text("Соответсвует")
-            if (db.serach_group(text2) > 0):
-                update.message.reply_text("Группа есть")
-                url = "https://rasp.dmami.ru/site/group?session=0&group=" + text2
-                headers = {'referer': 'https://rasp.dmami.ru/'}
-                r = requests.get(url, headers=headers)
-                datee = datetime.datetime.today()
-                datee = datee.weekday()
-                rr = r.text
-                data = json.loads(rr)
+        update.message.reply_text("Я не знаю(")
 
-                a = 0
-                spicok_par = []
+@debug_requests
+def lessons(update:Updater, contex):
+    user_text = update.message.text
+    tpl = '\d\d\d[-]\d\d\d'
+    if re.match(tpl, user_text) is not None:
+        update.message.reply_text("Соответствует форме")
+        if (db.serach_group(user_text) > 0):
+            update.message.reply_text("Группа есть")
+            url = "https://rasp.dmami.ru/site/group?session=0&group=" + user_text
+            headers = {'referer': 'https://rasp.dmami.ru/'}
+            r = requests.get(url, headers=headers)
+            print(r.status_code)
+            r = r.json()
+            today = datetime.datetime.today().isoweekday()
+            print(r['grid'][str(today)])
+            a = 0
+            today_lessons = []
+            while a != 7:
+                a += 1
+                try:
+                    name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
+                    today_lessons.append(name_lesson)
+                    teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
+                    today_lessons.append(teacher)
+                    update.message.reply_text(str(a) + ')' + name_lesson + "/" + teacher )
 
-                while a != 7:
-                    a += 1
-                    try:
-                        type_lesson = str(data['grid']['6'][str(a)][0]['type'])
-                        spicok_par.append(type_lesson)
-                        teacher = str(data['grid']['6'][str(a)][0]['teacher'])
-                        spicok_par.append(teacher)
-                        name_lesson = str(data['grid']['6'][str(a)][0]['sbj'])
-                        spicok_par.append(spicok_par.append(name_lesson))
-                    except IndexError:
-                        continue
-
-                update.message.reply_text(str(spicok_par))
-            else:
-                update.message.reply_text("Группы нет")
+                except IndexError:
+                    continue
+п
         else:
-            update.message.reply_text('# Не соответствует')
+            update.message.reply_text("Такой группы не существует")
+    else:
+        update.message.reply_text("Не соответствует")
 
+@debug_requests
+def address(update:Updater, contex):
+    update.message.reply_text("ты в адрессе")
+
+@debug_requests
+def cancel(update, context):
+    user = update.message.from_user
+    logger.info("User %s canceled the conversation.", user.first_name)
+    update.message.reply_text('Bye! I hope we can talk again some day.')
+
+    return ConversationHandler.END
 
 
 @debug_requests
@@ -119,16 +125,32 @@ def main():
 
     # TODO подлючить бд
 
-    # Default connection
-    # updater = Updater(config.token, use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', do_start)],
+
+        states={
+
+            ECHO:[MessageHandler(Filters.text, echo)],
+
+            LESSONS: [MessageHandler(Filters.text, lessons)],
+
+            ADDRESS: [MessageHandler(Filters.text, address)],
+
+        },
+
+        fallbacks=[CommandHandler('cancel', cancel)]
+    )
+
+    dp.add_handler(conv_handler)
+
     # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", do_start))
+    #dp.add_handler(CommandHandler("start", do_start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(MessageHandler(Filters.text, echo))
+    #dp.add_handler(MessageHandler(Filters.text, echo))
     # dp.add_error_handler(error)
 
     # Start the Bot
