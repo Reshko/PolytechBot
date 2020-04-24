@@ -40,6 +40,19 @@ def init_db(force: bool = False):
     # Сохранение изменений
     conn.commit()
 
+def make_table_users():
+    conn = get_connection()
+    c = conn.cursor()
+
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS all_users(
+            id      INTEGER PRIMARY KEY,
+            idUsers   INTEGER NOT NULL,
+            textGroup TEXT NOT NULL
+        )
+    ''')
+
+    conn.commit()
 
 #Поиск совпадений по группам
 def serach_group(number_group: str):
@@ -47,5 +60,27 @@ def serach_group(number_group: str):
     c = conn.cursor()
     c.execute('SELECT COUNT(*) FROM all_group WHERE numberGroup=?', (number_group,))
     (res,) = c.fetchone()
-    conn.commit()
     return res
+
+def count_group(id_users: int):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT COUNT(*) FROM all_users WHERE idUsers=?', (id_users,))
+    (res,) = c.fetchone()
+    return res
+
+def search_users(id_users: int):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT textGroup FROM all_users WHERE idUsers=?', (id_users,))
+    (res,) = c.fetchone()
+    return res
+
+def add_users(users_id: int,text: str):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('INSERT INTO all_users (idUsers,textGroup) VALUES (?,?)',(users_id,text))
+    conn.commit()
+
+
+

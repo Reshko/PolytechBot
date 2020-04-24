@@ -41,14 +41,47 @@ def do_start(update, context):
 
 @debug_requests
 def echo(update:Updater, contex):
-    if update.message.text == keyboard.BUTTON1_LESSONS:
+    user = update.message.from_user
+    if update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) == 0:
         update.message.reply_text("Введи группу")
         return LESSONS
+    elif update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) > 0:
+        number_group = db.search_users(user.id)
+        print('Старый пользователь')
+        url = "https://rasp.dmami.ru/site/group?session=0&group=" + number_group
+        headers = {'referer': 'https://rasp.dmami.ru/'}
+        r = requests.get(url, headers=headers)
+        print(r.status_code)
+        r = r.json()
+        today = datetime.datetime.today().isoweekday()
+        print(r['grid'][str(today)])
+        a = 0
+        today_lessons = []
+        while a != 7:
+            a += 1
+            try:
+                name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
+                today_lessons.append(name_lesson)
+                teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
+                today_lessons.append(teacher)
+                update.message.reply_text(str(a) + ')' + name_lesson + "/" + teacher)
+
+            except IndexError:
+                continue
+
+        update.message.reply_text("Изменить группу")
     elif update.message.text == keyboard.BUTTON2_ADDRESS:
         update.message.reply_text("Выбири адрес")
         return ADDRESS
     else:
         update.message.reply_text("Я не знаю(")
+
+
+#TODO Сделать функцию вывода рассписания
+@debug_requests
+def printLessons(text_group):
+    return 1
+
 
 @debug_requests
 def lessons(update:Updater, contex):
@@ -78,7 +111,7 @@ def lessons(update:Updater, contex):
 
                 except IndexError:
                     continue
-п
+
         else:
             update.message.reply_text("Такой группы не существует")
     else:
