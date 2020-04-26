@@ -41,11 +41,36 @@ def init_db(force: bool = False):
     conn.commit()
 
 
+
 #Поиск совпадений по группам
 def serach_group(number_group: str):
     conn = get_connection()
     c = conn.cursor()
     c.execute('SELECT COUNT(*) FROM all_group WHERE numberGroup=?', (number_group,))
     (res,) = c.fetchone()
-    conn.commit()
     return res
+
+def count_group(id_users: int):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT COUNT(*) FROM all_users WHERE idUsers=?', (id_users,))
+    (res,) = c.fetchone()
+    return res
+
+def search_users(id_users: int):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT textGroup FROM all_users WHERE idUsers=?', (id_users,))
+    (res,) = c.fetchone()
+    return res
+
+def add_users(users_id: int,name_users:str,lastname_users:str,login_users:str,text:str):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('INSERT INTO all_users (idUsers,nameUsers,lastNameUsers,logitUsers,textGroup) VALUES (?,?,?,?,?)',(users_id,name_users,lastname_users,login_users,text))
+    conn.commit()
+
+
+
+# if __name__ == '__main__':
+#     add_users(1,'2','3','4','5')
