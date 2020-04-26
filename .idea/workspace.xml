@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3cc3b460-741c-4ab1-b7c3-572bf682a188" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/keyboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/univer_info.db" beforeDir="false" afterPath="$PROJECT_DIR$/univer_info.db" afterDir="false" />
-    </list>
+    <list default="true" id="3cc3b460-741c-4ab1-b7c3-572bf682a188" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -197,7 +191,7 @@
       <workItem from="1586521997591" duration="7590000" />
       <workItem from="1586534922840" duration="6383000" />
       <workItem from="1586602620494" duration="916000" />
-      <workItem from="1587903540750" duration="552000" />
+      <workItem from="1587903540750" duration="839000" />
     </task>
     <task id="LOCAL-00001" summary="Доделать диалог">
       <created>1586200871779</created>
