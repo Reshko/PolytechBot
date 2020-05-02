@@ -71,6 +71,14 @@ def add_users(users_id: int,name_users:str,lastname_users:str,login_users:str,te
     conn.commit()
 
 
+def search_time_lesson(id: int):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT timeLesson FROM time_lesson WHERE id=?', (id,))
+    (res,) = c.fetchone()
+    return res
+
+
 
 # if __name__ == '__main__':
-#     add_users(1,'2','3','4','5')
+#     print(search_time_lesson(1))

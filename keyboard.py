@@ -3,6 +3,7 @@ from telegram import ReplyKeyboardMarkup
 #Инициация клавиатуры
 BUTTON1_LESSONS = "Расписание"
 BUTTON2_ADDRESS = "Адрес"
+BUTTON_INFO = "Контактная информация"
 
 BUTTON3_ELECTRO = "Электрозаводская"
 BUTTON4_AVTO = "Автозаводская"
@@ -11,6 +12,9 @@ BUTTON4_VPNH = "ВДНХ"
 reply_keyboard = [
     [
         BUTTON1_LESSONS, BUTTON2_ADDRESS
+    ],
+    [
+        BUTTON_INFO
     ]
 ]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True) #one_time_keyboard - клава закрывается после нажатия,resize_keyboard - маленькие кнопки

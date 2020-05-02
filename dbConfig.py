@@ -17,8 +17,8 @@ def make_table_users():
         CREATE TABLE IF NOT EXISTS all_users(
             id      INTEGER PRIMARY KEY,
             idUsers   INTEGER NOT NULL,
-            nameUsers TEXT NOT NULL,
-            lastNameUsers TEXT NOT NULL,
+            nameUsers TEXT,
+            lastNameUsers TEXT,
             logitUsers TEXT,
             textGroup TEXT NOT NULL
         )
@@ -55,3 +55,5 @@ def time_lesson():
     conn.commit()
 
 
+if __name__ == '__main__':
+    make_table_users()

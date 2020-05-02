@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3cc3b460-741c-4ab1-b7c3-572bf682a188" name="Default Changelist" comment="" />
+    <list default="true" id="3cc3b460-741c-4ab1-b7c3-572bf682a188" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dbConfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/dbConfig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/keyboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/univer_info.db" beforeDir="false" afterPath="$PROJECT_DIR$/univer_info.db" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +40,13 @@
         <item name="univer_info" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="univer_info" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+        <item name="time_lesson: table" type="3d80ac25:SqliteImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -99,6 +113,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="InlineKeyboard" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="bot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Example" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Example/InlineKeyboard.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="db" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="bot" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -113,6 +149,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/db.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dbConfig" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="bot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dbConfig.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -146,8 +204,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.Example" />
+        <item itemvalue="Python.InlineKeyboard" />
         <item itemvalue="Python.db" />
+        <item itemvalue="Python.dbConfig" />
+        <item itemvalue="Python.Example" />
       </list>
     </recent_temporary>
   </component>
@@ -191,7 +251,16 @@
       <workItem from="1586521997591" duration="7590000" />
       <workItem from="1586534922840" duration="6383000" />
       <workItem from="1586602620494" duration="916000" />
-      <workItem from="1587903540750" duration="839000" />
+      <workItem from="1587903540750" duration="1506000" />
+      <workItem from="1587910472969" duration="819000" />
+      <workItem from="1587924571222" duration="779000" />
+      <workItem from="1588004947819" duration="603000" />
+      <workItem from="1588019045678" duration="906000" />
+      <workItem from="1588019976416" duration="2539000" />
+      <workItem from="1588026508450" duration="3853000" />
+      <workItem from="1588197156532" duration="597000" />
+      <workItem from="1588396978408" duration="2761000" />
+      <workItem from="1588418450070" duration="2080000" />
     </task>
     <task id="LOCAL-00001" summary="Доделать диалог">
       <created>1586200871779</created>
@@ -259,38 +328,38 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1133" y="290" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1587903731044" />
-    <state width="1877" height="342" key="GridCell.Tab.0.bottom" timestamp="1586603538461">
+    <state width="1877" height="347" key="GridCell.Tab.0.bottom" timestamp="1588421075759">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="342" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586603538461" />
-    <state width="1877" height="342" key="GridCell.Tab.0.center" timestamp="1586603538461">
+    <state width="1877" height="347" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588421075759" />
+    <state width="1877" height="347" key="GridCell.Tab.0.center" timestamp="1588421075759">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="342" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586603538461" />
-    <state width="1877" height="342" key="GridCell.Tab.0.left" timestamp="1586603538460">
+    <state width="1877" height="347" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588421075759" />
+    <state width="1877" height="347" key="GridCell.Tab.0.left" timestamp="1588421075759">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="342" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586603538460" />
-    <state width="1877" height="342" key="GridCell.Tab.0.right" timestamp="1586603538461">
+    <state width="1877" height="347" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588421075759" />
+    <state width="1877" height="347" key="GridCell.Tab.0.right" timestamp="1588421075759">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="342" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586603538461" />
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1586540462823">
+    <state width="1877" height="347" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588421075759" />
+    <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1588421075760">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586540462823" />
-    <state width="1877" height="347" key="GridCell.Tab.1.center" timestamp="1586540462823">
+    <state width="1877" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588421075760" />
+    <state width="1877" height="347" key="GridCell.Tab.1.center" timestamp="1588421075759">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586540462823" />
-    <state width="1877" height="347" key="GridCell.Tab.1.left" timestamp="1586540462823">
+    <state width="1877" height="347" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588421075759" />
+    <state width="1877" height="347" key="GridCell.Tab.1.left" timestamp="1588421075759">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586540462823" />
-    <state width="1877" height="347" key="GridCell.Tab.1.right" timestamp="1586540462823">
+    <state width="1877" height="347" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588421075759" />
+    <state width="1877" height="347" key="GridCell.Tab.1.right" timestamp="1588421075760">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586540462823" />
+    <state width="1877" height="347" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588421075760" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1585855902560">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -303,6 +372,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="256" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1586529756218" />
+    <state x="849" y="413" width="319" height="222" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1588020030711">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="849" y="413" width="319" height="222" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1920.1040@0.0.1920.1040" timestamp="1588020030711" />
+    <state x="669" y="170" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1588019820463">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="669" y="170" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588019820463" />
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1587904092450">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -326,7 +403,9 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/bot$Example.coverage" NAME="Example Coverage Results" MODIFIED="1586540055314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/bot$db.coverage" NAME="db Coverage Results" MODIFIED="1586522752458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/bot$main.coverage" NAME="main Coverage Results" MODIFIED="1586603036432" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bot$db.coverage" NAME="db Coverage Results" MODIFIED="1588026646386" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bot$dbConfig.coverage" NAME="dbConfig Coverage Results" MODIFIED="1588020053375" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bot$main.coverage" NAME="main Coverage Results" MODIFIED="1588419836663" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bot$InlineKeyboard.coverage" NAME="InlineKeyboard Coverage Results" MODIFIED="1588419062430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Example" />
   </component>
 </project>
