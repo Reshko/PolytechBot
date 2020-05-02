@@ -36,7 +36,9 @@ def add_message(user_id: int, text: str):
     c.execute('INSERT INTO user_message(user_id, text) VALUES (?,?)', (user_id, text))
     conn.commit()
 
-
+'''
 if __name__ == '__main__':
     init_db()
     add_message(11,'asdasd')
+'''
+
