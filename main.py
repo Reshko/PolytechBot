@@ -77,15 +77,7 @@ def echo(update:Updater, contex):
         else:
             update.message.reply_text("Воскресенье")
     elif update.message.text == keyboard.BUTTON2_ADDRESS:
-
-        keyboard2 = [[InlineKeyboardButton(keyboard.BUTTON3_ELECTRO, callback_data='1'),
-                     InlineKeyboardButton(keyboard.BUTTON4_AVTO, callback_data='2')],
-
-                    [InlineKeyboardButton(keyboard.BUTTON4_VPNH, callback_data='3')]]
-
-        reply_markup2 = InlineKeyboardMarkup(keyboard2)
-
-        update.message.reply_text('Please choose:', reply_markup=reply_markup2)
+        update.message.reply_text('Please choose:', reply_markup=keyboard.inline_markup)
 
         return ADDRESS
 
@@ -93,11 +85,18 @@ def echo(update:Updater, contex):
 def button(update, context):
     query = update.callback_query
 
+    if query.data == keyboard.BUTTON3_ELECTRO:
+        query.edit_message_text(str(db.get_address(query.data)))
+    elif query.data == keyboard.BUTTON4_AVTO:
+        query.edit_message_text(str(db.get_address(query.data)))
+    elif query.data == keyboard.BUTTON4_VPNH:
+        query.edit_message_text(str(db.get_address(query.data)))
+
     # CallbackQueries need to be answered, even if no notification to the user is needed
     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
-    query.answer()
 
-    query.edit_message_text(text="Selected option: {}".format(query.data))
+
+    # query.edit_message_text(text="Selected option: {}".format(query.data))
 
 @debug_requests
 def lessons(update:Updater, contex):

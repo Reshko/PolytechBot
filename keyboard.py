@@ -1,4 +1,4 @@
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 
 #Инициация клавиатуры
 BUTTON1_LESSONS = "Расписание"
@@ -29,3 +29,14 @@ reply_keyboard2 = [
 ]
 
 markup2 = ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True, resize_keyboard=True)
+
+inline_keyboard = [[InlineKeyboardButton(BUTTON3_ELECTRO, callback_data=str(BUTTON3_ELECTRO)),
+              InlineKeyboardButton(BUTTON4_AVTO, callback_data=str(BUTTON4_AVTO))],
+
+             [InlineKeyboardButton(BUTTON4_VPNH, callback_data=str(BUTTON4_VPNH))]]
+
+inline_markup = InlineKeyboardMarkup(inline_keyboard)
+
+inline_keyboard2 = [[InlineKeyboardButton("Назад")]
+
+]

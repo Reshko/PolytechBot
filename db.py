@@ -78,7 +78,13 @@ def search_time_lesson(id: int):
     (res,) = c.fetchone()
     return res
 
+def get_address(keyword : str):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT nameAddress,linkAddress FROM address WHERE keyWord=?', (keyword,))
+    (res,) = c.fetchall()
+    return res
 
 
-# if __name__ == '__main__':
-#     print(search_time_lesson(1))
+if __name__ == '__main__':
+    print(get_address("ВДНХ"))
