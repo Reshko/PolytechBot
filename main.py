@@ -1,10 +1,9 @@
-import json
 import logging
 import config
 import re
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler
 from telegram.utils.request import Request
-from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Bot
 import db
 import requests
 import datetime
@@ -29,10 +28,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-ECHO, LESSONS, ADDRESS = range(3)
+ECHO, LESSONS, CHANGE_GROUP = range(3)
 
 @debug_requests
-def do_start(update, context):
+def do_start(update: Updater, context):
     update.message.reply_text(
         "Всем привет",
         reply_markup=keyboard.markup
@@ -45,9 +44,8 @@ def json_lesson(id):
     r = requests.get(url, headers=headers).json()
     return r
 
-
 @debug_requests
-def echo(update:Updater, contex):
+def echo(update: Updater, contex):
     user = update.message.from_user
     if update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) == 0:
         update.message.reply_text("Введи группу")
@@ -61,17 +59,23 @@ def echo(update:Updater, contex):
             print(r['grid'][str(today)])
             a = 0
             today_lessons = []
+            dic = {}
             while a != 7:
                 a += 1
                 try:
                     name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
-                    today_lessons.append(name_lesson)
+                    #today_lessons2.append(name_lesson)
                     teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
-                    today_lessons.append(teacher)
-                    update.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher )
+                    #today_lessons2.append(teacher)
+                    update.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher)
+                    dic = {'time':str(db.search_time_lesson(a)),"name_lesson":name_lesson,"teacher":teacher}
+                    today_lessons.append(dic)
+
                 except IndexError:
                     continue
-            update.message.reply_text("Изменить группу")
+
+            print(str(today_lessons))
+            update.message.reply_text('Please choose:', reply_markup=keyboard.inline_markup2)
 
             return ECHO
         else:
@@ -79,24 +83,61 @@ def echo(update:Updater, contex):
     elif update.message.text == keyboard.BUTTON2_ADDRESS:
         update.message.reply_text('Please choose:', reply_markup=keyboard.inline_markup)
 
-        return ADDRESS
+@debug_requests
+def change_group(update: Updater, contex):
+    user_text = update.message.text
+    print(user_text)
+
+
 
 @debug_requests
-def button(update, context):
+def button(update: Updater, context):
     query = update.callback_query
 
     if query.data == keyboard.BUTTON3_ELECTRO:
         query.edit_message_text(str(db.get_address(query.data)))
     elif query.data == keyboard.BUTTON4_AVTO:
         query.edit_message_text(str(db.get_address(query.data)))
-    elif query.data == keyboard.BUTTON4_VPNH:
+    elif query.data == keyboard.BUTTON5_VPNH:
         query.edit_message_text(str(db.get_address(query.data)))
+    elif query.data == "Prev":
+        number_group = db.search_users(query.message.chat.id)
+        r, today = prevOrNextLesson(number_group, False)
+        if today != 7:
+            a = 0
+            while a != 7:
+                a += 1
+                try:
+                    name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
+                    teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
+                    query.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher )
+                except IndexError:
+                    continue
+        else: query.message.reply_text("Воскресенье")
+    elif query.data == "Next":
+        number_group = db.search_users(query.message.chat.id)
+        r, today = prevOrNextLesson(number_group,True)
+        if today != 7:
+            a = 0
+            while a != 7:
+                a += 1
+                try:
+                    name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
+                    teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
+                    query.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher )
+                except IndexError:
+                    continue
+        else: query.message.reply_text("Воскресенье")
 
-    # CallbackQueries need to be answered, even if no notification to the user is needed
-    # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
-
-
-    # query.edit_message_text(text="Selected option: {}".format(query.data))
+@debug_requests
+def prevOrNextLesson(number_group: str, flag: bool):
+    r = json_lesson(number_group)
+    today = datetime.datetime.today().isoweekday()
+    if flag:  # NextDay
+        today = 1 if today == 7 else today + 1
+    else:  # PrevDay
+        today = 7 if today == 1 else today - 1
+    return r, today
 
 @debug_requests
 def lessons(update:Updater, contex):
@@ -134,12 +175,6 @@ def lessons(update:Updater, contex):
         update.message.reply_text("Не соответствует")
 
 @debug_requests
-def address(update:Updater, contex):
-    if (update.message.text == 'Электрозаводская'):
-        print()
-    update.message.reply_text("ты в адрессе")
-
-@debug_requests
 def cancel(update:Updater, context):
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
@@ -147,12 +182,10 @@ def cancel(update:Updater, context):
 
     return ConversationHandler.END
 
-
 @debug_requests
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-
 
 def main():
     logger.info("Start bot")
@@ -186,7 +219,7 @@ def main():
 
             LESSONS: [MessageHandler(Filters.text, lessons)],
 
-            ADDRESS: [MessageHandler(Filters.text, address)]
+            CHANGE_GROUP: [MessageHandler(Filters.text, change_group)]
 
         },
 
@@ -205,7 +238,6 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-
 
 if __name__ == '__main__':
     main()
