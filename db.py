@@ -85,6 +85,13 @@ def get_address(keyword : str):
     (res,) = c.fetchall()
     return res
 
+def update_group(number_group: str, id_users: int):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('UPDATE all_users SET textGroup =? WHERE idUsers=?', (number_group,id_users))
+    conn.commit()
 
-if __name__ == '__main__':
-    print(get_address("ВДНХ"))
+
+
+# if __name__ == '__main__':
+#     update_group("171-371",397450253)

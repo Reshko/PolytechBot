@@ -50,6 +50,9 @@ def echo(update: Updater, contex):
     if update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) == 0:
         update.message.reply_text("Введи группу")
         return LESSONS
+    elif update.message.text == keyboard.BUTTON_CHANGE:
+        update.message.reply_text("Введите группу")
+        return CHANGE_GROUP
     elif update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) > 0:
         print(user)
         number_group = db.search_users(user.id)
@@ -86,9 +89,8 @@ def echo(update: Updater, contex):
 @debug_requests
 def change_group(update: Updater, contex):
     user_text = update.message.text
-    print(user_text)
-
-
+    user = update.message.from_user
+    db.update_group(user_text, user.id)
 
 @debug_requests
 def button(update: Updater, context):
@@ -215,7 +217,7 @@ def main():
 
         states={
 
-            ECHO:[MessageHandler(Filters.regex('^(Расписание|Адрес)$'), echo)],
+            ECHO:[MessageHandler(Filters.regex('^(Расписание|Адрес|Изменить группу|Контактная информация)$'), echo)],
 
             LESSONS: [MessageHandler(Filters.text, lessons)],
 

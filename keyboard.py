@@ -2,6 +2,7 @@ from telegram import ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMa
 
 #Инициация клавиатуры
 BUTTON1_LESSONS = "Расписание"
+BUTTON_CHANGE = "Изменить группу"
 BUTTON2_ADDRESS = "Адрес"
 BUTTON_INFO = "Контактная информация"
 
@@ -18,6 +19,9 @@ BUTTON_ALL_DAY = "На всю неделю"
 reply_keyboard = [
     [
         BUTTON1_LESSONS, BUTTON2_ADDRESS
+    ],
+    [
+        BUTTON_CHANGE
     ],
     [
         BUTTON_INFO
