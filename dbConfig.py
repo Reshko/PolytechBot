@@ -54,6 +54,18 @@ def time_lesson():
 
     conn.commit()
 
+def dayOfWeek():
+    conn = get_connection()
+    c = conn.cursor()
+
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS day_of_week(
+            id      INTEGER PRIMARY KEY,
+            dayWeek   TEXT NOT NULL
+        )
+    ''')
+
+    conn.commit()
 
 if __name__ == '__main__':
-    make_table_users()
+    dayOfWeek()

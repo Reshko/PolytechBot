@@ -36,8 +36,11 @@ inline_keyboard = [[InlineKeyboardButton(BUTTON3_ELECTRO, callback_data=str(BUTT
 
 inline_markup = InlineKeyboardMarkup(inline_keyboard)
 
+url=InlineKeyboardMarkup([[InlineKeyboardButton("Hello", url="https://google.com")]])
+
 inline_keyboard2 = [[InlineKeyboardButton(BUTTON_PREV,callback_data="Prev"),
                      InlineKeyboardButton(BUTTON_NEXT,callback_data="Next")],
                     [InlineKeyboardButton(BUTTON_ALL_DAY,callback_data="AllLessons")]]
 
 inline_markup2 = InlineKeyboardMarkup(inline_keyboard2)
+

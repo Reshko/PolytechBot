@@ -92,6 +92,14 @@ def update_group(number_group: str, id_users: int):
     conn.commit()
 
 
+def search_dayWeek(id: int):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT dayWeek FROM day_of_week WHERE id=?', (id,))
+    (res,) = c.fetchone()
+    return res
 
-# if __name__ == '__main__':
-#     update_group("171-371",397450253)
+
+
+if __name__ == '__main__':
+    print(search_dayWeek(2))

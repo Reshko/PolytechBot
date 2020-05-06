@@ -9,6 +9,7 @@ import requests
 import datetime
 import keyboard
 
+
 '''Декоратор для отладки событий
   '''
 def debug_requests(f):
@@ -20,7 +21,6 @@ def debug_requests(f):
             logger.exception(f"Ошибка в обработчике {f.__name__}")
             raise
     return inner
-
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -90,7 +90,14 @@ def echo(update: Updater, contex):
 def change_group(update: Updater, contex):
     user_text = update.message.text
     user = update.message.from_user
-    db.update_group(user_text, user.id)
+    tpl = '\d\d\d[-]\d\d\d'
+    if re.match(tpl, user_text) is not None:
+        if (db.serach_group(user_text) > 0):
+            update.message.reply_text("Группа изменена")
+            db.update_group(user_text,user.id)
+            return ECHO
+        else: update.message.reply_text("Такой группы не существует")
+    else: update.message.reply_text("Не соответсвует форме")
 
 @debug_requests
 def button(update: Updater, context):
@@ -130,6 +137,26 @@ def button(update: Updater, context):
                 except IndexError:
                     continue
         else: query.message.reply_text("Воскресенье")
+    elif query.data == "AllLessons":
+        number_group = db.search_users(query.message.chat.id)
+        r, today = prevOrNextLesson(number_group, True)
+        if today != 7:
+            a = 0
+            b = 0
+            while b != 6:
+                b += 1
+                a = 0
+                query.message.reply_text(db.search_dayWeek(b))
+                while a != 7:
+                    a += 1
+                    try:
+                        name_lesson = str(r['grid'][str(b)][str(a)][0]['sbj'])
+                        teacher = str(r['grid'][str(b)][str(a)][0]['teacher'])
+                        query.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher)
+                    except IndexError:
+                        continue
+        else:
+            query.message.reply_text("Воскресенье")
 
 @debug_requests
 def prevOrNextLesson(number_group: str, flag: bool):
