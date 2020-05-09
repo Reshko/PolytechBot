@@ -81,8 +81,15 @@ def search_time_lesson(id: int):
 def get_address(keyword : str):
     conn = get_connection()
     c = conn.cursor()
-    c.execute('SELECT nameAddress,linkAddress FROM address WHERE keyWord=?', (keyword,))
-    (res,) = c.fetchall()
+    c.execute('SELECT nameAddress FROM address WHERE keyWord=?', (keyword,))
+    (res,) = c.fetchone()
+    return res
+
+def get_url_address(keyword : str):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT linkAddress FROM address WHERE keyWord=?', (keyword,))
+    (res,) = c.fetchone()
     return res
 
 def update_group(number_group: str, id_users: int):
@@ -102,4 +109,4 @@ def search_dayWeek(id: int):
 
 
 if __name__ == '__main__':
-    print(search_dayWeek(2))
+    print(get_url_address("ВДНХ"))

@@ -67,5 +67,22 @@ def dayOfWeek():
 
     conn.commit()
 
+def make_info():
+    conn = get_connection()
+    c = conn.cursor()
+
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS information(
+            id      INTEGER PRIMARY KEY,
+            irfrdUsers   INTEGER NOT NULL,
+            nameUsers TEXT,
+            lastNameUsers TEXT,
+            logitUsers TEXT,
+            textGroup TEXT NOT NULL
+        )
+    ''')
+
+    conn.commit()
+
 if __name__ == '__main__':
     dayOfWeek()

@@ -53,6 +53,8 @@ def echo(update: Updater, contex):
     elif update.message.text == keyboard.BUTTON_CHANGE:
         update.message.reply_text("Введите группу")
         return CHANGE_GROUP
+    elif update.message.text == keyboard.BUTTON_INFO:
+        update.message.reply_text("💬",reply_markup=keyboard.inline_markup_info)
     elif update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) > 0:
         print(user)
         number_group = db.search_users(user.id)
@@ -62,29 +64,27 @@ def echo(update: Updater, contex):
             print(r['grid'][str(today)])
             a = 0
             today_lessons = []
-            dic = {}
             while a != 7:
                 a += 1
                 try:
                     name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
-                    #today_lessons2.append(name_lesson)
                     teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
-                    #today_lessons2.append(teacher)
-                    update.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher)
-                    dic = {'time':str(db.search_time_lesson(a)),"name_lesson":name_lesson,"teacher":teacher}
-                    today_lessons.append(dic)
-
+                    update.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "\n" + teacher)
+                    # today_lessons.append(
+                    #     {
+                    #         'time':db.search_time_lesson(a),
+                    #         'lesson':name_lesson,
+                    #         'teacher':teacher
+                    #     }
+                    # )
                 except IndexError:
                     continue
-
-            print(str(today_lessons))
-            update.message.reply_text('Please choose:', reply_markup=keyboard.inline_markup2)
-
             return ECHO
         else:
             update.message.reply_text("Воскресенье")
     elif update.message.text == keyboard.BUTTON2_ADDRESS:
-        update.message.reply_text('Please choose:', reply_markup=keyboard.inline_markup)
+        update.message.reply_text('Выберети адресс', reply_markup=keyboard.inline_markup)
+        return ECHO
 
 @debug_requests
 def change_group(update: Updater, contex):
@@ -93,7 +93,7 @@ def change_group(update: Updater, contex):
     tpl = '\d\d\d[-]\d\d\d'
     if re.match(tpl, user_text) is not None:
         if (db.serach_group(user_text) > 0):
-            update.message.reply_text("Группа изменена")
+            update.message.reply_text("Группа изменена",reply_markup=keyboard.markup)
             db.update_group(user_text,user.id)
             return ECHO
         else: update.message.reply_text("Такой группы не существует")
@@ -104,11 +104,11 @@ def button(update: Updater, context):
     query = update.callback_query
 
     if query.data == keyboard.BUTTON3_ELECTRO:
-        query.edit_message_text(str(db.get_address(query.data)))
+        query.edit_message_text(str(db.get_address(query.data)),reply_markup=keyboard.get_url_address(query.data))
     elif query.data == keyboard.BUTTON4_AVTO:
-        query.edit_message_text(str(db.get_address(query.data)))
+        query.edit_message_text(str(db.get_address(query.data)),reply_markup=keyboard.get_url_address(query.data))
     elif query.data == keyboard.BUTTON5_VPNH:
-        query.edit_message_text(str(db.get_address(query.data)))
+        query.edit_message_text(str(db.get_address(query.data)),reply_markup=keyboard.get_url_address(query.data))
     elif query.data == "Prev":
         number_group = db.search_users(query.message.chat.id)
         r, today = prevOrNextLesson(number_group, False)
@@ -248,7 +248,7 @@ def main():
 
             LESSONS: [MessageHandler(Filters.text, lessons)],
 
-            CHANGE_GROUP: [MessageHandler(Filters.text, change_group)]
+            CHANGE_GROUP: [MessageHandler(Filters.text, change_group)],
 
         },
 
