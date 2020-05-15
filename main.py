@@ -1,5 +1,5 @@
 import logging
-import config
+from config import token
 import re
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler
 from telegram.utils.request import Request
@@ -7,8 +7,7 @@ from telegram import Bot
 import db
 import requests
 import datetime
-import keyboard
-
+from keyboard import keyboard
 
 '''Декоратор для отладки событий
   '''
@@ -54,7 +53,7 @@ def echo(update: Updater, contex):
         update.message.reply_text("Введите группу")
         return CHANGE_GROUP
     elif update.message.text == keyboard.BUTTON_INFO:
-        update.message.reply_text("💬 Ваш выбор",reply_markup=keyboard.inline_markup_info)
+        update.message.reply_text("💬 Ваш выбор", reply_markup=keyboard.inline_markup_info)
     elif update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) > 0:
         print(user)
         number_group = db.search_users(user.id)
@@ -87,7 +86,7 @@ def change_group(update: Updater, contex):
     tpl = '\d\d\d[-]\d\d\d'
     if re.match(tpl, user_text) is not None:
         if (db.serach_group(user_text) > 0):
-            update.message.reply_text("Группа изменена",reply_markup=keyboard.markup)
+            update.message.reply_text("Группа изменена", reply_markup=keyboard.markup)
             db.update_group(user_text,user.id)
             return ECHO
         else: update.message.reply_text("Такой группы не существует")
@@ -98,11 +97,11 @@ def button(update: Updater, context):
     query = update.callback_query
 
     if query.data == keyboard.BUTTON3_ELECTRO:
-        query.edit_message_text(str(db.get_address(query.data)),reply_markup=keyboard.get_url_address(query.data))
+        query.edit_message_text(str(db.get_address(query.data)), reply_markup=keyboard.get_url_address(query.data))
     elif query.data == keyboard.BUTTON4_AVTO:
-        query.edit_message_text(str(db.get_address(query.data)),reply_markup=keyboard.get_url_address(query.data))
+        query.edit_message_text(str(db.get_address(query.data)), reply_markup=keyboard.get_url_address(query.data))
     elif query.data == keyboard.BUTTON5_VPNH:
-        query.edit_message_text(str(db.get_address(query.data)),reply_markup=keyboard.get_url_address(query.data))
+        query.edit_message_text(str(db.get_address(query.data)), reply_markup=keyboard.get_url_address(query.data))
     elif query.data == "Prev":
         number_group = db.search_users(query.message.chat.id)
         r, today = prevOrNextLesson(number_group, False)
@@ -152,13 +151,13 @@ def button(update: Updater, context):
         else:
             query.message.reply_text("Воскресенье")
     elif query.data == "Приёмная коммиссия":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1430, 1431, 1250, 1296 \n priem@mospolytech.ru",reply_markup=keyboard.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1430, 1431, 1250, 1296 \n priem@mospolytech.ru", reply_markup=keyboard.inline_markup_info)
     elif query.data == "Профком":
-        query.edit_message_text("+7 (495) 223-05-31 \n profkom@mospolytech.ru",reply_markup=keyboard.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-31 \n profkom@mospolytech.ru", reply_markup=keyboard.inline_markup_info)
     elif query.data == "Бугалтерия":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1322, 1236, 1379",reply_markup=keyboard.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1322, 1236, 1379", reply_markup=keyboard.inline_markup_info)
     elif query.data == "ЦРС":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1116 \n ghbty.e.gorina@mospolytech.ru",reply_markup=keyboard.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1116 \n ghbty.e.gorina@mospolytech.ru", reply_markup=keyboard.inline_markup_info)
 
 @debug_requests
 def prevOrNextLesson(number_group: str, flag: bool):
@@ -227,7 +226,7 @@ def main():
     )
 
     bot = Bot(
-        token=config.token,
+        token=token.token,
         request=req
     )
     updater = Updater(
