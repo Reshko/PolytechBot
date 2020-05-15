@@ -27,7 +27,7 @@ def init_db(force: bool = False):
 
     #Забираем данные по группа из файла
     #TODO СДЕЛАТЬ ДИНАМИЧКОЕ ОБНОВЛЕНИЕ ЭТОГО ФАЙЛА
-    with open('groups-list.json') as f:
+    with open('config/groups-list.json') as f:
         templates = json.load(f)
     f.close()
 
@@ -70,7 +70,6 @@ def add_users(users_id: int,name_users:str,lastname_users:str,login_users:str,te
     c.execute('INSERT INTO all_users (idUsers,nameUsers,lastNameUsers,logitUsers,textGroup) VALUES (?,?,?,?,?)',(users_id,name_users,lastname_users,login_users,text))
     conn.commit()
 
-
 def search_time_lesson(id: int):
     conn = get_connection()
     c = conn.cursor()
@@ -108,5 +107,4 @@ def search_dayWeek(id: int):
 
 
 
-if __name__ == '__main__':
-    print(get_url_address("ВДНХ"))
+#if __name__ == '__main__':

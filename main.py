@@ -1,4 +1,6 @@
 import logging
+import sys
+
 from config import token
 import re
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler
@@ -7,7 +9,12 @@ from telegram import Bot
 import db
 import requests
 import datetime
-from keyboard import keyboard
+
+sys.path.insert(0, '/keyboard/')
+from keyboard import app
+from keyboard import MainKeyboard
+from keyboard import KeyboardInline
+
 
 '''Декоратор для отладки событий
   '''
@@ -32,11 +39,12 @@ ECHO, LESSONS, CHANGE_GROUP = range(3)
 @debug_requests
 def do_start(update: Updater, context):
     update.message.reply_text(
-        "Всем привет",
-        reply_markup=keyboard.markup
+        "Добро пожаловать",
+        reply_markup=app.markup
     )
     return ECHO
 
+@debug_requests
 def json_lesson(id):
     url = "https://rasp.dmami.ru/site/group?session=0&group=" + id
     headers = {'referer': 'https://rasp.dmami.ru/'}
@@ -46,15 +54,15 @@ def json_lesson(id):
 @debug_requests
 def echo(update: Updater, contex):
     user = update.message.from_user
-    if update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) == 0:
+    if update.message.text == MainKeyboard.BUTTON_LESSONS and db.count_group(user.id) == 0:
         update.message.reply_text("Введи группу")
         return LESSONS
-    elif update.message.text == keyboard.BUTTON_CHANGE:
+    elif update.message.text == MainKeyboard.BUTTON_CHANGE:
         update.message.reply_text("Введите группу")
         return CHANGE_GROUP
-    elif update.message.text == keyboard.BUTTON_INFO:
-        update.message.reply_text("💬 Ваш выбор", reply_markup=keyboard.inline_markup_info)
-    elif update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) > 0:
+    elif update.message.text == MainKeyboard.BUTTON_INFO:
+        update.message.reply_text("💬 Ваш выбор", reply_markup=app.inline_markup_info)
+    elif update.message.text == MainKeyboard.BUTTON_LESSONS and db.count_group(user.id) > 0:
         print(user)
         number_group = db.search_users(user.id)
         r = json_lesson(number_group)
@@ -71,12 +79,12 @@ def echo(update: Updater, contex):
                     update.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "\n" + teacher)
                 except IndexError:
                     continue
-            update.message.reply_text('Please choose:', reply_markup=keyboard.inline_markup2)
+            update.message.reply_text('Please choose:', reply_markup=app.inline_markup2)
             return ECHO
         else:
-            update.message.reply_text("Воскресенье", reply_markup=keyboard.inline_markup2)
-    elif update.message.text == keyboard.BUTTON2_ADDRESS:
-        update.message.reply_text('Выберети адресс', reply_markup=keyboard.inline_markup)
+            update.message.reply_text("Воскресенье", reply_markup=app.inline_markup2)
+    elif update.message.text == MainKeyboard.BUTTON_ADDRESS:
+        update.message.reply_text('Выберети адресс', reply_markup=app.inline_markup)
         return ECHO
 
 @debug_requests
@@ -86,7 +94,7 @@ def change_group(update: Updater, contex):
     tpl = '\d\d\d[-]\d\d\d'
     if re.match(tpl, user_text) is not None:
         if (db.serach_group(user_text) > 0):
-            update.message.reply_text("Группа изменена", reply_markup=keyboard.markup)
+            update.message.reply_text("Группа изменена", reply_markup=app.markup)
             db.update_group(user_text,user.id)
             return ECHO
         else: update.message.reply_text("Такой группы не существует")
@@ -96,12 +104,12 @@ def change_group(update: Updater, contex):
 def button(update: Updater, context):
     query = update.callback_query
 
-    if query.data == keyboard.BUTTON3_ELECTRO:
-        query.edit_message_text(str(db.get_address(query.data)), reply_markup=keyboard.get_url_address(query.data))
-    elif query.data == keyboard.BUTTON4_AVTO:
-        query.edit_message_text(str(db.get_address(query.data)), reply_markup=keyboard.get_url_address(query.data))
-    elif query.data == keyboard.BUTTON5_VPNH:
-        query.edit_message_text(str(db.get_address(query.data)), reply_markup=keyboard.get_url_address(query.data))
+    if query.data == KeyboardInline.BUTTON_ELECTRO:
+        query.edit_message_text(str(db.get_address(query.data)), reply_markup=KeyboardInline.get_url_address(query.data))
+    elif query.data == KeyboardInline.BUTTON_AVTO:
+        query.edit_message_text(str(db.get_address(query.data)), reply_markup=KeyboardInline.get_url_address(query.data))
+    elif query.data == KeyboardInline.BUTTON_VPNH:
+        query.edit_message_text(str(db.get_address(query.data)), reply_markup=KeyboardInline.get_url_address(query.data))
     elif query.data == "Prev":
         number_group = db.search_users(query.message.chat.id)
         r, today = prevOrNextLesson(number_group, False)
@@ -151,13 +159,13 @@ def button(update: Updater, context):
         else:
             query.message.reply_text("Воскресенье")
     elif query.data == "Приёмная коммиссия":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1430, 1431, 1250, 1296 \n priem@mospolytech.ru", reply_markup=keyboard.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1430, 1431, 1250, 1296 \n priem@mospolytech.ru", reply_markup=app.inline_markup_info)
     elif query.data == "Профком":
-        query.edit_message_text("+7 (495) 223-05-31 \n profkom@mospolytech.ru", reply_markup=keyboard.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-31 \n profkom@mospolytech.ru", reply_markup=app.inline_markup_info)
     elif query.data == "Бугалтерия":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1322, 1236, 1379", reply_markup=keyboard.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1322, 1236, 1379", reply_markup=app.inline_markup_info)
     elif query.data == "ЦРС":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1116 \n ghbty.e.gorina@mospolytech.ru", reply_markup=keyboard.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1116 \n ghbty.e.gorina@mospolytech.ru", reply_markup=app.inline_markup_info)
 
 @debug_requests
 def prevOrNextLesson(number_group: str, flag: bool):
@@ -209,7 +217,6 @@ def cancel(update:Updater, context):
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
     update.message.reply_text('Bye! I hope we can talk again some day.')
-
     return ConversationHandler.END
 
 @debug_requests
@@ -217,6 +224,7 @@ def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
+@debug_requests
 def main():
     logger.info("Start bot")
 
