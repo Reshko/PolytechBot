@@ -74,15 +74,14 @@ def make_info():
     c.execute('''
         CREATE TABLE IF NOT EXISTS information(
             id      INTEGER PRIMARY KEY,
-            irfrdUsers   INTEGER NOT NULL,
-            nameUsers TEXT,
-            lastNameUsers TEXT,
-            logitUsers TEXT,
-            textGroup TEXT NOT NULL
+            buttonnName   TEXT NOT NULL,
+            numberPhone TEXT NOT NULL,
+            addPhoneNumber TEXT,
+            email TEXT NOT NULL
         )
     ''')
 
     conn.commit()
 
 if __name__ == '__main__':
-    dayOfWeek()
+    make_info()

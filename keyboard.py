@@ -41,12 +41,23 @@ inline_keyboard = [
 
 inline_markup = InlineKeyboardMarkup(inline_keyboard)
 
-def get_info(keyword: str):
-    return InlineKeyboardMarkup(
+inline_markup_info = InlineKeyboardMarkup(
+    [
         [
-            []
+            InlineKeyboardButton("Приёмная коммиссия", callback_data="Приёмная коммиссия")
+        ],
+        [
+            InlineKeyboardButton("LMS",url="https://lms.mospolytech.ru/"),InlineKeyboardButton("Личный \t Кабинет",url="https://e.mospolytech.ru/")
+        ],
+        [
+            InlineKeyboardButton("Профком", callback_data="Профком"),InlineKeyboardButton("ЦРС", callback_data="ЦРС")
+        ],
+        [
+            InlineKeyboardButton("Бугалтерия", callback_data="Бугалтерия")
         ]
-    )
+    ]
+)
+
 
 def get_url_address(name_address :str):
     return InlineKeyboardMarkup(

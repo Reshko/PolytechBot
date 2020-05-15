@@ -54,7 +54,7 @@ def echo(update: Updater, contex):
         update.message.reply_text("Введите группу")
         return CHANGE_GROUP
     elif update.message.text == keyboard.BUTTON_INFO:
-        update.message.reply_text("💬",reply_markup=keyboard.inline_markup_info)
+        update.message.reply_text("💬 Ваш выбор",reply_markup=keyboard.inline_markup_info)
     elif update.message.text == keyboard.BUTTON1_LESSONS and db.count_group(user.id) > 0:
         print(user)
         number_group = db.search_users(user.id)
@@ -70,18 +70,12 @@ def echo(update: Updater, contex):
                     name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
                     teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
                     update.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "\n" + teacher)
-                    # today_lessons.append(
-                    #     {
-                    #         'time':db.search_time_lesson(a),
-                    #         'lesson':name_lesson,
-                    #         'teacher':teacher
-                    #     }
-                    # )
                 except IndexError:
                     continue
+            update.message.reply_text('Please choose:', reply_markup=keyboard.inline_markup2)
             return ECHO
         else:
-            update.message.reply_text("Воскресенье")
+            update.message.reply_text("Воскресенье", reply_markup=keyboard.inline_markup2)
     elif update.message.text == keyboard.BUTTON2_ADDRESS:
         update.message.reply_text('Выберети адресс', reply_markup=keyboard.inline_markup)
         return ECHO
@@ -157,6 +151,14 @@ def button(update: Updater, context):
                         continue
         else:
             query.message.reply_text("Воскресенье")
+    elif query.data == "Приёмная коммиссия":
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1430, 1431, 1250, 1296 \n priem@mospolytech.ru",reply_markup=keyboard.inline_markup_info)
+    elif query.data == "Профком":
+        query.edit_message_text("+7 (495) 223-05-31 \n profkom@mospolytech.ru",reply_markup=keyboard.inline_markup_info)
+    elif query.data == "Бугалтерия":
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1322, 1236, 1379",reply_markup=keyboard.inline_markup_info)
+    elif query.data == "ЦРС":
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1116 \n ghbty.e.gorina@mospolytech.ru",reply_markup=keyboard.inline_markup_info)
 
 @debug_requests
 def prevOrNextLesson(number_group: str, flag: bool):
@@ -252,11 +254,12 @@ def main():
 
         },
 
-        fallbacks=[CommandHandler('cancel', cancel)]
+        fallbacks=[CommandHandler('start', do_start)]
     )
 
     dp.add_handler(conv_handler)
-    updater.dispatcher.add_handler(CallbackQueryHandler(button))
+    #updater.dispatcher.add_handler(CallbackQueryHandler(button))
+    dp.add_handler(CallbackQueryHandler(button))
 
 
     # dp.add_error_handler(error)
