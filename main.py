@@ -16,8 +16,7 @@ from keyboard import MainKeyboard
 from keyboard import KeyboardInline
 
 
-'''Декоратор для отладки событий
-  '''
+''' Декоратор для отладки событий '''
 def debug_requests(f):
     def inner(*args, **kwargs):
         try:
@@ -55,10 +54,10 @@ def json_lesson(id):
 def echo(update: Updater, contex):
     user = update.message.from_user
     if update.message.text == MainKeyboard.BUTTON_LESSONS and db.count_group(user.id) == 0:
-        update.message.reply_text("Введи группу")
+        update.message.reply_text("Введите группу 📝 ")
         return LESSONS
     elif update.message.text == MainKeyboard.BUTTON_CHANGE:
-        update.message.reply_text("Введите группу")
+        update.message.reply_text("Введите группу 📝 ")
         return CHANGE_GROUP
     elif update.message.text == MainKeyboard.BUTTON_INFO:
         update.message.reply_text("💬 Ваш выбор", reply_markup=app.inline_markup_info)
@@ -70,7 +69,6 @@ def echo(update: Updater, contex):
         if today < 7:
             print(r['grid'][str(today)])
             a = 0
-            today_lessons = []
             while a != 7:
                 a += 1
                 try:
@@ -82,7 +80,7 @@ def echo(update: Updater, contex):
             update.message.reply_text('Please choose:', reply_markup=app.inline_markup2)
             return ECHO
         else:
-            update.message.reply_text("Воскресенье", reply_markup=app.inline_markup2)
+            update.message.reply_text("Воскресенье 🌄", reply_markup=app.inline_markup2)
     elif update.message.text == MainKeyboard.BUTTON_ADDRESS:
         update.message.reply_text('Выберети адресс', reply_markup=app.inline_markup)
         return ECHO
@@ -94,11 +92,11 @@ def change_group(update: Updater, contex):
     tpl = '\d\d\d[-]\d\d\d'
     if re.match(tpl, user_text) is not None:
         if (db.serach_group(user_text) > 0):
-            update.message.reply_text("Группа изменена", reply_markup=app.markup)
+            update.message.reply_text("Группа изменена ✅", reply_markup=app.markup)
             db.update_group(user_text,user.id)
             return ECHO
-        else: update.message.reply_text("Такой группы не существует")
-    else: update.message.reply_text("Не соответсвует форме")
+        else: update.message.reply_text("Такой группы не существует ❌")
+    else: update.message.reply_text("Не соответсвует форме 💥")
 
 @debug_requests
 def button(update: Updater, context):
@@ -123,7 +121,7 @@ def button(update: Updater, context):
                     query.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher )
                 except IndexError:
                     continue
-        else: query.message.reply_text("Воскресенье")
+        else: query.message.reply_text("Воскресенье 🌄")
     elif query.data == "Next":
         number_group = db.search_users(query.message.chat.id)
         r, today = prevOrNextLesson(number_group,True)
@@ -137,7 +135,7 @@ def button(update: Updater, context):
                     query.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher )
                 except IndexError:
                     continue
-        else: query.message.reply_text("Воскресенье")
+        else: query.message.reply_text("Воскресенье 🌄")
     elif query.data == "AllLessons":
         number_group = db.search_users(query.message.chat.id)
         r, today = prevOrNextLesson(number_group, True)
@@ -157,7 +155,7 @@ def button(update: Updater, context):
                     except IndexError:
                         continue
         else:
-            query.message.reply_text("Воскресенье")
+            query.message.reply_text("Воскресенье 🌄")
     elif query.data == "Приёмная коммиссия":
         query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1430, 1431, 1250, 1296 \n priem@mospolytech.ru", reply_markup=app.inline_markup_info)
     elif query.data == "Профком":
@@ -183,7 +181,6 @@ def lessons(update:Updater, contex):
     user = update.message.from_user
     tpl = '\d\d\d[-]\d\d\d'
     if re.match(tpl, user_text) is not None:
-        update.message.reply_text("Соответствует форме")
         if (db.serach_group(user_text) > 0):
             print(user)
             db.add_users(user.id,user.first_name,user.last_name,user.username,user_text)
@@ -202,9 +199,10 @@ def lessons(update:Updater, contex):
                         teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
                         today_lessons.append(teacher)
                         update.message.reply_text(str(db.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher )
-
                     except IndexError:
                         continue
+                update.message.reply_text('Please choose:', reply_markup=app.inline_markup2)
+                return ECHO
             else:
                 update.message.reply_text("Сегодня нет пар")
         else:

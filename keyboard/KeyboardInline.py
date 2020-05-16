@@ -46,7 +46,7 @@ def get_url_address(name_address :str):
     return InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("Карта",url=str(db.get_url_address(name_address)))
+                InlineKeyboardButton("Карта🗺️",url=str(db.get_url_address(name_address)))
             ],
             [
                 InlineKeyboardButton(BUTTON_ELECTRO, callback_data=str(BUTTON_ELECTRO)),InlineKeyboardButton(BUTTON_VPNH, callback_data=str(BUTTON_VPNH))
