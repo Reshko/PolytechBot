@@ -11,6 +11,15 @@ inline_markup2 = InlineKeyboardMarkup(keyboard.KeyboardInline.inline_keyboard2)
 
 inline_markup_info = InlineKeyboardMarkup(keyboard.KeyboardInline.inline_keyboard3)
 
+inline_markup_admin = InlineKeyboardMarkup(keyboard.KeyboardInline.admin_keyboard)
+
+inline_markup_manager = InlineKeyboardMarkup(keyboard.KeyboardInline.managet_keyboard)
+
+inline_markup_tester = InlineKeyboardMarkup(keyboard.KeyboardInline.tester_keyboard)
+
+inline_markup_database_tester = InlineKeyboardMarkup(keyboard.KeyboardInline.database_tester_keyboard)
+
+
 
 
 
