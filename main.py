@@ -17,10 +17,10 @@ sys.path.insert(0, '/keyboard/')
 from keyboard import app
 from keyboard import MainKeyboard
 from keyboard import KeyboardInline
-from admin.admin import admin
-from manager.manage_main import manager
-from tester.tester_main import tester
-from database_tester.database_main import data_base_tester
+# from admin.admin import admin
+# from manager.manage_main import manager
+# from tester.tester_main import tester
+# from database_tester.database_main import data_base_tester
 
 
 
@@ -83,11 +83,11 @@ def echo(update: Updater, contex):
     elif update.message.text == MainKeyboard.BUTTON_LESSONS and DB.count_group(user.id) > 0:
         print(user)
         number_group = DB.search_users(user.id)
-        #r = json_lesson(number_group)
+        r = json_lesson(number_group)
 
 
-        path = Path('config/less.json')
-        r = json.loads(path.read_text(encoding='utf-8'))
+        #path = Path('config/less.json')
+        #r = json.loads(path.read_text(encoding='utf-8'))
         print(r)
         #today = datetime.datetime.today().isoweekday()
         today = 4
@@ -417,10 +417,10 @@ def main():
     dp.add_handler(conv_handler)
     dp.add_handler(CommandHandler('info',get_info))
     dp.add_handler(CommandHandler('help', help))
-    dp.add_handler(CommandHandler('admin',admin))
-    dp.add_handler(CommandHandler('manager', manager))
-    dp.add_handler(CommandHandler('tester', tester))
-    dp.add_handler(CommandHandler('database',data_base_tester))
+    # dp.add_handler(CommandHandler('admin',admin))
+    # dp.add_handler(CommandHandler('manager', manager))
+    # dp.add_handler(CommandHandler('tester', tester))
+    # dp.add_handler(CommandHandler('database',data_base_tester))
     #updater.dispatcher.add_handler(CallbackQueryHandler(button))
     dp.add_handler(CallbackQueryHandler(button))
 
