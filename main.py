@@ -17,10 +17,7 @@ sys.path.insert(0, '/keyboard/')
 from keyboard import app
 from keyboard import MainKeyboard
 from keyboard import KeyboardInline
-# from admin.admin import admin
-# from manager.manage_main import manager
-# from tester.tester_main import tester
-# from database_tester.database_main import data_base_tester
+
 
 
 
@@ -204,112 +201,7 @@ def button(update: Updater, context):
         query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1322, 1236, 1379", reply_markup=app.inline_markup_info)
     elif query.data == "ЦРС":
         query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1116 \n ghbty.e.gorina@mospolytech.ru", reply_markup=app.inline_markup_info)
-    #Администатор
-    elif query.data == 'Кол-во пользователей':
-        now = datetime.datetime.now()
-        query.edit_message_text(str(now.strftime("%d-%m-%Y %H:%M")) + "\n"+str(DB.select_all_users(None))+ " users",
-                                reply_markup=app.inline_markup_admin)
-    elif query.data == 'Бд':
-        now = datetime.datetime.now()
-        query.edit_message_text(str(now.strftime("%d-%m-%Y %H:%M")) + "\n"
-                                 + "Sqllite 7 таблиц sqlite3" + "\n"
-                                 + "MongoDb 2 таблицы pyMongo",reply_markup=app.inline_markup_admin)
-    elif query.data == 'Кол-во групп':
-        now = datetime.datetime.now()
-        query.edit_message_text(str(now.strftime("%d-%m-%Y %H:%M")) + "\n"
-                                + str("В базе данных присутсвует 400 групп"),reply_markup=app.inline_markup_manager)
-    elif query.data == "Активность":
-        now = datetime.datetime.now()
-        query.edit_message_text(str(now.strftime("%d-%m-%Y %H:%M")) + "\n"
-                                +"За последние 2 дня 0 новыйх пользователей",reply_markup=app.inline_markup_manager)
-    elif query.data == "Функция1":
-        query.edit_message_text('.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                'log.info Функция Prev() уcпешно отработала',
-                                reply_markup=app.inline_markup_tester)
-    elif query.data == "Функция2":
-        query.edit_message_text('.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                'log.info Функция Next() уcпешно отработала',
-                                reply_markup=app.inline_markup_tester)
-    elif query.data == "Функция3":
-        query.edit_message_text('.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                'log.info Функция All_lesson() уcпешно отработала',
-                                reply_markup=app.inline_markup_tester)
-    elif query.data == "Функция4":
-        query.edit_message_text('.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                'log.info Функция Change_group() уcпешно отработала',
-                                reply_markup=app.inline_markup_tester)
-    elif query.data == "Таблица1":
-        query.edit_message_text('.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                'log.info Таблица address: 5 полей, 1 ключ',
-                                reply_markup=app.inline_markup_database_tester)
-    elif query.data == "Таблица2":
-        query.edit_message_text('.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                'log.info Таблица info_users: 10 полей , 1 ключ, 2 внешний ключ',
-                                reply_markup=app.inline_markup_database_tester)
-    elif query.data == "Таблица3":
-        query.edit_message_text('.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                'log.info Таблица all_group: 400 полей, 1 ключ',
-                                reply_markup=app.inline_markup_database_tester)
-    elif query.data == "Таблица4":
-        query.edit_message_text('.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                '.'+'\n'+
-                                'log.info Таблица  info_deveice:10 полей ',
-                                reply_markup=app.inline_markup_database_tester)
+
 
 @debug_requests
 def prevOrNextLesson(number_group: str, flag: bool):
@@ -417,11 +309,7 @@ def main():
     dp.add_handler(conv_handler)
     dp.add_handler(CommandHandler('info',get_info))
     dp.add_handler(CommandHandler('help', help))
-    # dp.add_handler(CommandHandler('admin',admin))
-    # dp.add_handler(CommandHandler('manager', manager))
-    # dp.add_handler(CommandHandler('tester', tester))
-    # dp.add_handler(CommandHandler('database',data_base_tester))
-    #updater.dispatcher.add_handler(CallbackQueryHandler(button))
+    updater.dispatcher.add_handler(CallbackQueryHandler(button))
     dp.add_handler(CallbackQueryHandler(button))
 
 
