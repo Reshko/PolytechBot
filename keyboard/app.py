@@ -1,9 +1,12 @@
-from telegram import ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
-import db
-import keyboard.MainKeyboard
-import keyboard.KeyboardInline
+from telegram import ReplyKeyboardMarkup
+from telegram import InlineKeyboardMarkup
+from telegram import InlineKeyboardButton
 
-markup = ReplyKeyboardMarkup(keyboard.MainKeyboard.main_keyboard, one_time_keyboard=True, resize_keyboard=True) #one_time_keyboard - клава закрывается после нажатия,resize_keyboard - маленькие кнопки
+import keyboard.MainKeyboard  # from keyboard import MainKeyboard
+import keyboard.KeyboardInline  # from keyboard import KeyboardInline
+
+markup = ReplyKeyboardMarkup(keyboard.MainKeyboard.main_keyboard, one_time_keyboard=True,
+                             resize_keyboard=True)  # one_time_keyboard - клава закрывается после нажатия,resize_keyboard - маленькие кнопки
 
 inline_markup = InlineKeyboardMarkup(keyboard.KeyboardInline.inline_keyboard)
 
@@ -18,12 +21,3 @@ inline_markup_manager = InlineKeyboardMarkup(keyboard.KeyboardInline.managet_key
 inline_markup_tester = InlineKeyboardMarkup(keyboard.KeyboardInline.tester_keyboard)
 
 inline_markup_database_tester = InlineKeyboardMarkup(keyboard.KeyboardInline.database_tester_keyboard)
-
-
-
-
-
-
-
-
-

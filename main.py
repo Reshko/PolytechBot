@@ -1,27 +1,35 @@
-import json
-import logging
-import sys
-from pathlib import Path
+from telegram.ext import Updater
+from telegram.ext import CommandHandler
+from telegram.ext import MessageHandler
+from telegram.ext import CallbackQueryHandler
+from telegram.ext import ConversationHandler
+from telegram.ext import Filters
 
-from config import token
-import re
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler
-from telegram.utils.request import Request
-from telegram import Bot, ParseMode
-from db import DB
-import requests
-import datetime
-from dbConfig import MakeDb
-
-sys.path.insert(0, '/keyboard/')
 from keyboard import app
 from keyboard import MainKeyboard
 from keyboard import KeyboardInline
 
+from telegram import Bot
+from telegram import ParseMode
+from telegram.utils.request import Request
 
+from pathlib import Path
+from dbConfig import MakeDb
+from config import token
+from db import DB
 
+import json
+import logging
+import sys
+import requests
+import datetime
+import re
+
+sys.path.insert(0, '/keyboard/')
 
 ''' Декоратор для отладки событий '''
+
+
 def debug_requests(f):
     def inner(*args, **kwargs):
         try:
@@ -30,7 +38,9 @@ def debug_requests(f):
         except Exception:
             logger.exception(f"Ошибка в обработчике {f.__name__}")
             raise
+
     return inner
+
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -40,14 +50,16 @@ logger = logging.getLogger(__name__)
 
 ECHO, LESSONS, CHANGE_GROUP = range(3)
 
+
 @debug_requests
 def do_start(update: Updater, context):
     update.message.reply_text(
         "<b>Добро пожаловать</b>",
         reply_markup=app.markup,
-        parse_mode = ParseMode.HTML
+        parse_mode=ParseMode.HTML
     )
     return ECHO
+
 
 def help(update: Updater, context):
     update.message.reply_text(
@@ -56,14 +68,13 @@ def help(update: Updater, context):
     )
 
 
-
-
 @debug_requests
 def json_lesson(id):
     url = "https://rasp.dmami.ru/site/group?session=0&group=" + id
     headers = {'referer': 'https://rasp.dmami.ru/'}
     r = requests.get(url, headers=headers).json()
     return r
+
 
 @debug_requests
 def echo(update: Updater, contex):
@@ -76,17 +87,17 @@ def echo(update: Updater, contex):
         update.message.reply_text("Введите группу 📝 ")
         return CHANGE_GROUP
     elif update.message.text == MainKeyboard.BUTTON_INFO:
-        update.message.reply_text("💬 Ваш выбор", reply_markup=app.inline_markup_info)
+        update.message.reply_text("💬 Ваш выбор",
+                                  reply_markup=app.inline_markup_info)
     elif update.message.text == MainKeyboard.BUTTON_LESSONS and DB.count_group(user.id) > 0:
         print(user)
         number_group = DB.search_users(user.id)
         r = json_lesson(number_group)
 
-
-        #path = Path('config/less.json')
-        #r = json.loads(path.read_text(encoding='utf-8'))
+        # path = Path('config/less.json')
+        # r = json.loads(path.read_text(encoding='utf-8'))
         print(r)
-        #today = datetime.datetime.today().isoweekday()
+        # today = datetime.datetime.today().isoweekday()
         today = 4
         if today < 7:
             print(r['grid'][str(today)])
@@ -97,61 +108,53 @@ def echo(update: Updater, contex):
                     name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
                     teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
                     time_lesson = DB.search_time_lesson(a)
-                    update.message.reply_text('<i>'+time_lesson+'</i>' + '\n' + name_lesson + "\n" + teacher,
+                    update.message.reply_text('<i>' + time_lesson + '</i>' + '\n' + name_lesson + "\n" + teacher,
                                               parse_mode=ParseMode.HTML)
                 except IndexError:
                     continue
-            update.message.reply_text('Please choose:', reply_markup=app.inline_markup2)
+            update.message.reply_text('Please choose:',
+                                      reply_markup=app.inline_markup2)
             return ECHO
         else:
-            update.message.reply_text("Воскресенье 🌄", reply_markup=app.inline_markup2)
+            update.message.reply_text("Воскресенье 🌄",
+                                      reply_markup=app.inline_markup2)
     elif update.message.text == MainKeyboard.BUTTON_ADDRESS:
         update.message.reply_text('Выберети адресс', reply_markup=app.inline_markup)
         return ECHO
+
 
 @debug_requests
 def change_group(update: Updater, contex):
     user_text = update.message.text
     user = update.message.from_user
-    tpl = '\d\d\d[-]\d\d\d'
+    tpl = r'\d\d\d[-]\d\d\d'
     if re.match(tpl, user_text) is not None:
-        if (DB.serach_group(user_text) > 0):
+        if DB.serach_group(user_text) > 0:
             update.message.reply_text("Группа изменена ✅", reply_markup=app.markup)
-            DB.update_group(user_text,user.id)
+            DB.update_group(user_text, user.id)
             return ECHO
-        else: update.message.reply_text("Такой группы не существует ❌")
-    else: update.message.reply_text("Не соответсвует форме 💥")
+        else:
+            update.message.reply_text("Такой группы не существует ❌")
+    else:
+        update.message.reply_text("Не соответсвует форме 💥")
+
 
 @debug_requests
 def button(update: Updater, context):
     query = update.callback_query
     print(query)
     if query.data == KeyboardInline.BUTTON_ELECTRO:
-        query.edit_message_text(str(DB.get_address(query.data)), reply_markup=KeyboardInline.get_url_address(query.data))
+        query.edit_message_text(str(DB.get_address(query.data)),
+                                reply_markup=KeyboardInline.get_url_address(query.data))
     elif query.data == KeyboardInline.BUTTON_AVTO:
-        query.edit_message_text(str(DB.get_address(query.data)), reply_markup=KeyboardInline.get_url_address(query.data))
+        query.edit_message_text(str(DB.get_address(query.data)),
+                                reply_markup=KeyboardInline.get_url_address(query.data))
     elif query.data == KeyboardInline.BUTTON_VPNH:
-        query.edit_message_text(str(DB.get_address(query.data)), reply_markup=KeyboardInline.get_url_address(query.data))
+        query.edit_message_text(str(DB.get_address(query.data)),
+                                reply_markup=KeyboardInline.get_url_address(query.data))
     elif query.data == "Prev":
         number_group = DB.search_users(query.message.chat.id)
         r, today = prevOrNextLesson(number_group, False)
-        if today != 7:
-            a = 0
-            while a != 7:
-                a += 1
-                try:
-                    name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
-                    teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
-                    time_lesson = DB.search_time_lesson(a)
-                    query.message.reply_text('<i>'+time_lesson+'</i>' + '\n' + name_lesson + "\n" + teacher,
-                                             parse_mode=ParseMode.HTML)
-                except IndexError:
-                    continue
-            query.message.reply_text('Please choose:', reply_markup=app.inline_markup2)
-        else: query.message.reply_text("Воскресенье 🌄",reply_markup=app.inline_markup2)
-    elif query.data == "Next":
-        number_group = DB.search_users(query.message.chat.id)
-        r, today = prevOrNextLesson(number_group,True)
         if today != 7:
             a = 0
             while a != 7:
@@ -164,11 +167,34 @@ def button(update: Updater, context):
                                              parse_mode=ParseMode.HTML)
                 except IndexError:
                     continue
-            query.message.reply_text('Please choose:', reply_markup=app.inline_markup2)
-        else: query.message.reply_text("Воскресенье 🌄",reply_markup=app.inline_markup2)
+            query.message.reply_text('Please choose:',
+                                     reply_markup=app.inline_markup2)
+        else:
+            query.message.reply_text("Воскресенье 🌄",
+                                     reply_markup=app.inline_markup2)
+    elif query.data == "Next":
+        number_group = DB.search_users(query.message.chat.id)
+        r, today = prevOrNextLesson(number_group, True)
+        if today != 7:
+            a = 0
+            while a != 7:
+                a += 1
+                try:
+                    name_lesson = str(r['grid'][str(today)][str(a)][0]['sbj'])
+                    teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
+                    time_lesson = DB.search_time_lesson(a)
+                    query.message.reply_text('<i>' + time_lesson + '</i>' + '\n' + name_lesson + "\n" + teacher,
+                                             parse_mode=ParseMode.HTML)
+                except IndexError:
+                    continue
+            query.message.reply_text('Please choose:',
+                                     reply_markup=app.inline_markup2)
+        else:
+            query.message.reply_text("Воскресенье 🌄",
+                                     reply_markup=app.inline_markup2)
     elif query.data == "AllLessons":
-        #number_group = DB.search_users(query.message.chat.id)
-        #r, today = prevOrNextLesson(number_group, True)
+        # number_group = DB.search_users(query.message.chat.id)
+        # r, today = prevOrNextLesson(number_group, True)
         today = 2
         path = Path('config/less.json')
         r = json.loads(path.read_text(encoding='utf-8'))
@@ -178,8 +204,8 @@ def button(update: Updater, context):
             while b != 6:
                 b += 1
                 a = 0
-                day_week = DB.search_dayWeek(b,None)
-                query.message.reply_text("<b>"+day_week+"</b>",
+                day_week = DB.search_dayWeek(b, None)
+                query.message.reply_text("<b>" + day_week + "</b>",
                                          parse_mode=ParseMode.HTML)
                 while a != 7:
                     a += 1
@@ -194,40 +220,49 @@ def button(update: Updater, context):
         else:
             query.message.reply_text("Воскресенье 🌄")
     elif query.data == "Приёмная коммиссия":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1430, 1431, 1250, 1296 \n priem@mospolytech.ru", reply_markup=app.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 "
+                                "\n Добавочные 1430, 1431, 1250, 1296 "
+                                "\n priem@mospolytech.ru",
+                                reply_markup=app.inline_markup_info)
     elif query.data == "Профком":
-        query.edit_message_text("+7 (495) 223-05-31 \n profkom@mospolytech.ru", reply_markup=app.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-31 \n profkom@mospolytech.ru",
+                                reply_markup=app.inline_markup_info)
     elif query.data == "Бугалтерия":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1322, 1236, 1379", reply_markup=app.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1322, 1236, 1379",
+                                reply_markup=app.inline_markup_info)
     elif query.data == "ЦРС":
-        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1116 \n ghbty.e.gorina@mospolytech.ru", reply_markup=app.inline_markup_info)
+        query.edit_message_text("+7 (495) 223-05-23 \n Добавочные 1116 \n ghbty.e.gorina@mospolytech.ru",
+                                reply_markup=app.inline_markup_info)
 
 
 @debug_requests
 def prevOrNextLesson(number_group: str, flag: bool):
     r = json_lesson(number_group)
     today = datetime.datetime.today().isoweekday()
-    #today = 3
+    # today = 3
     if flag:  # NextDay
         today = 1 if today == 7 else today + 1
     else:  # PrevDay
         today = 7 if today == 1 else today - 1
     return r, today
 
-def get_info(update:Updater, contex):
-    update.message.reply_text("Данный телеграм бот является курсовым проектом \nОсновной задачей которого является "
+
+def get_info(update: Updater, contex):
+    update.message.reply_text("Данный телеграм бот является курсовым проектом "
+                              "\nОсновной задачей которого является "
                               "предоставляение необходимый информации \n"
                               "kolpak.al6@yandex.ru")
 
+
 @debug_requests
-def lessons(update:Updater, contex):
+def lessons(update: Updater, contex):
     user_text = update.message.text
     user = update.message.from_user
-    tpl = '\d\d\d[-]\d\d\d'
+    tpl = r'\d\d\d[-]\d\d\d'
     if re.match(tpl, user_text) is not None:
         if (DB.serach_group(user_text) > 0):
             print(user)
-            DB.add_users(user.id,user.first_name,user.last_name,user.username,user_text)
+            DB.add_users(user.id, user.first_name, user.last_name, user.username, user_text)
             r = json_lesson(user_text)
             today = datetime.datetime.today().isoweekday()
             print(today)
@@ -242,10 +277,11 @@ def lessons(update:Updater, contex):
                         today_lessons.append(name_lesson)
                         teacher = str(r['grid'][str(today)][str(a)][0]['teacher'])
                         today_lessons.append(teacher)
-                        update.message.reply_text(str(DB.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher )
+                        update.message.reply_text(str(DB.search_time_lesson(a)) + ')' + name_lesson + "/" + teacher)
                     except IndexError:
                         continue
-                update.message.reply_text('Please choose:', reply_markup=app.inline_markup2)
+                update.message.reply_text('Please choose:',
+                                          reply_markup=app.inline_markup2)
                 return ECHO
             else:
                 update.message.reply_text("Сегодня нет пар")
@@ -254,17 +290,20 @@ def lessons(update:Updater, contex):
     else:
         update.message.reply_text("Не соответствует")
 
+
 @debug_requests
-def cancel(update:Updater, context):
+def cancel(update: Updater, context):
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
     update.message.reply_text('Bye! I hope we can talk again some day.')
     return ConversationHandler.END
 
+
 @debug_requests
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
+
 
 @debug_requests
 def main():
@@ -295,7 +334,7 @@ def main():
 
         states={
 
-            ECHO:[MessageHandler(Filters.regex('^(Расписание|Адрес|Изменить группу|Контактная информация)$'), echo)],
+            ECHO: [MessageHandler(Filters.regex('^(Расписание|Адрес|Изменить группу|Контактная информация)$'), echo)],
 
             LESSONS: [MessageHandler(Filters.text, lessons)],
 
@@ -307,11 +346,10 @@ def main():
     )
 
     dp.add_handler(conv_handler)
-    dp.add_handler(CommandHandler('info',get_info))
+    dp.add_handler(CommandHandler('info', get_info))
     dp.add_handler(CommandHandler('help', help))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     dp.add_handler(CallbackQueryHandler(button))
-
 
     # dp.add_error_handler(error)
     # Start the Bot
@@ -321,6 +359,7 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
+
 
 if __name__ == '__main__':
     main()

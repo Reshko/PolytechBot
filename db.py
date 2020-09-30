@@ -1,8 +1,8 @@
 import sqlite3
 import json
 
-
 __connection = None
+
 
 def get_connection():
     global __connection
@@ -13,7 +13,7 @@ def get_connection():
 
 class DB():
 
-    #Создание базы данных
+    # Создание базы данных
     def init_db(force: bool = False):
         conn = get_connection()
         c = conn.cursor()
@@ -28,22 +28,22 @@ class DB():
             )
         ''')
 
-        #Забираем данные по группа из файла
-        #TODO СДЕЛАТЬ ДИНАМИЧКОЕ ОБНОВЛЕНИЕ ЭТОГО ФАЙЛА
+        # Забираем данные по группа из файла
+        # TODO СДЕЛАТЬ ДИНАМИЧКОЕ ОБНОВЛЕНИЕ ЭТОГО ФАЙЛА
         with open('config/groups-list.json') as f:
             templates = json.load(f)
         f.close()
 
         _group = templates['groups']
 
-        #Вливание данных из файла в бд
+        # Вливание данных из файла в бд
         for i in _group:
             c.execute('INSERT INTO all_group (numberGroup) VALUES (?)', (i,))
 
         # Сохранение изменений
         conn.commit()
 
-    #Поиск совпадений по группам
+    # Поиск совпадений по группам
     def serach_group(number_group: str):
         conn = get_connection()
         c = conn.cursor()
@@ -65,10 +65,11 @@ class DB():
         (res,) = c.fetchone()
         return res
 
-    def add_users(users_id: int,name_users:str,lastname_users:str,login_users:str,text:str):
+    def add_users(users_id: int, name_users: str, lastname_users: str, login_users: str, text: str):
         conn = get_connection()
         c = conn.cursor()
-        c.execute('INSERT INTO all_users (idUsers,nameUsers,lastNameUsers,logitUsers,textGroup) VALUES (?,?,?,?,?)',(users_id,name_users,lastname_users,login_users,text))
+        c.execute('INSERT INTO all_users (idUsers,nameUsers,lastNameUsers,logitUsers,textGroup) VALUES (?,?,?,?,?)',
+                  (users_id, name_users, lastname_users, login_users, text))
         conn.commit()
 
     def search_time_lesson(id: int):
@@ -78,14 +79,14 @@ class DB():
         (res,) = c.fetchone()
         return res
 
-    def get_address(self,keyword : str):
+    def get_address(self, keyword: str):
         conn = get_connection()
         c = conn.cursor()
         c.execute('SELECT nameAddress FROM address WHERE keyWord=?', (keyword,))
         (res,) = c.fetchone()
         return res
 
-    def get_url_address(keyword : str):
+    def get_url_address(keyword: str):
         conn = get_connection()
         c = conn.cursor()
         c.execute('SELECT linkAddress FROM address WHERE keyWord=?', (keyword,))
@@ -95,29 +96,27 @@ class DB():
     def update_group(number_group: str, id_users: int):
         conn = get_connection()
         c = conn.cursor()
-        c.execute('UPDATE all_users SET textGroup =? WHERE idUsers=?', (number_group,id_users))
+        c.execute('UPDATE all_users SET textGroup =? WHERE idUsers=?', (number_group, id_users))
         conn.commit()
 
-
-    def search_dayWeek(id: int,self):
+    def search_dayWeek(id: int, self):
         conn = get_connection()
         c = conn.cursor()
         c.execute('SELECT dayWeek FROM day_of_week WHERE id=?', (id,))
         (res,) = c.fetchone()
         return res
 
-
-    def get_address(keyword : str):
+    def get_address(keyword: str):
         conn = get_connection()
         c = conn.cursor()
         c.execute('SELECT nameAddress FROM address WHERE keyWord=?', (keyword,))
         (res,) = c.fetchone()
         return res
 
-    def check_access(a: str,id: int):
+    def check_access(a: str, id: int):
         conn = get_connection()
         c = conn.cursor()
-        c.execute('SELECT '+ a + ' FROM access WHERE id_users=?', (id,))
+        c.execute('SELECT ' + a + ' FROM access WHERE id_users=?', (id,))
         (res,) = c.fetchone()
         return res
 
@@ -127,13 +126,3 @@ class DB():
         c.execute('SELECT COUNT(*) FROM all_users ')
         (res,) = c.fetchone()
         return res
-
-
-
-
-# if __name__ == '__main__':
-#     res = DB.drop_all_tables(None)
-#
-#     for i in res:
-#         print(i)
-
