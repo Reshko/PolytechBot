@@ -1,0 +1,41 @@
+table,all_group,all_group,2,"CREATE TABLE all_group(
+            id      INTEGER PRIMARY KEY,
+            numberGroup   TEXT NOT NULL
+        )"
+table,time_lesson,time_lesson,7,"CREATE TABLE time_lesson(
+            id      INTEGER PRIMARY KEY,
+            timeLesson   TEXT NOT NULL
+        )"
+table,address,address,5,"CREATE TABLE address(
+            id      INTEGER PRIMARY KEY,
+            keyWord TEXT NOT NULL,
+            nameAddress   TEXT NOT NULL,
+            linkAddress TEXT NOT NULL
+        )"
+table,all_users,all_users,6,"CREATE TABLE all_users(
+            id      INTEGER PRIMARY KEY,
+            idUsers   INTEGER NOT NULL,
+            nameUsers TEXT,
+            lastNameUsers TEXT,
+            logitUsers TEXT,
+            textGroup TEXT NOT NULL
+        )"
+table,day_of_week,day_of_week,8,"CREATE TABLE day_of_week(
+            id      INTEGER PRIMARY KEY,
+            dayWeek   TEXT NOT NULL
+        )"
+table,information,information,9,"CREATE TABLE information(
+            id      INTEGER PRIMARY KEY,
+            buttonnName   TEXT NOT NULL,
+            numberPhone TEXT NOT NULL,
+            addPhoneNumber TEXT,
+            email TEXT NOT NULL
+        )"
+table,access,access,11,"CREATE TABLE ""access""
+(
+	id_users int not null,
+	admin_value int,
+	manager_value int,
+	tester_value int,
+	database_tester int
+)"
